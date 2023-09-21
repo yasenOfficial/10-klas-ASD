@@ -1,0 +1,10 @@
+Implement:
+
+Dynamic Array
+Linked List
+Double Linked List
+Stack
+Queue
+
+Stack -> Push element to the top, pop element from the top
+Queue -> Enqueue element to the end, dequeue element from the front
