@@ -25,7 +25,7 @@ struct ListNode * get(LinkedList * list, int index) {
 void pushFront(LinkedList * list, double value) {
     struct ListNode * newNode = (struct ListNode *)malloc(sizeof(struct ListNode));
     if (newNode == NULL) {
-        printf(stderr, "Memory allocation failed\n");
+        fprintf(stderr, "Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
 
@@ -37,7 +37,7 @@ void pushFront(LinkedList * list, double value) {
 
 void pushToIndex(LinkedList *list, int index, double value) {
     if (index < 0 || index > list->size) {
-        printf(stderr, "Invalid index\n");
+        fprintf(stderr, "Invalid index\n");
         exit(EXIT_FAILURE);
     }
 
@@ -46,7 +46,7 @@ void pushToIndex(LinkedList *list, int index, double value) {
     } else {
         struct ListNode * newNode = (struct ListNode *)malloc(sizeof(struct ListNode));
         if (newNode == NULL) {
-            printf(stderr, "Memory allocation failed\n");
+            fprintf(stderr, "Memory allocation failed\n");
             exit(EXIT_FAILURE);
         }
 
@@ -97,7 +97,7 @@ double popAtIndex(LinkedList * list, int index) {
 
 double popBack(LinkedList * list) {
     if (list->size == 0 || list->head == NULL) {
-        printf(stderr, "List is empty\n");
+        fprintf(stderr, "List is empty\n");
         exit(EXIT_FAILURE);
     }
 
@@ -119,7 +119,7 @@ void set(LinkedList *list, int index, double value) {
     if (node != NULL) {
         node->value = value;
     } else {
-        printf(stderr, "Invalid index or empty list\n");
+        fprintf(stderr, "Invalid index or empty list\n");
         exit(EXIT_FAILURE);
     }
 }

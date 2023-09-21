@@ -6,7 +6,7 @@ DynamicArray init(unsigned int capacity) {
     DynamicArray arr;
     arr.buffer = (int *)malloc(capacity * sizeof(int));
     if (arr.buffer == NULL) {
-        printf(stderr, "Memory allocation failed\n");
+        fprintf(stderr, "Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
     arr.capacity = capacity;
@@ -16,7 +16,7 @@ DynamicArray init(unsigned int capacity) {
 
 int getElement(DynamicArray * arr, int index) {
     if (index < 0 || index >= arr->size) {
-        printf(stderr, "Index out of bounds\n");
+        fprintf(stderr, "Index out of bounds\n");
         exit(EXIT_FAILURE);
     }
     return arr->buffer[index];
@@ -24,7 +24,7 @@ int getElement(DynamicArray * arr, int index) {
 
 void setElement(DynamicArray * arr, int index, int value) {
     if (index < 0 || index >= arr->size) {
-        printf(stderr, "Index out of bounds\n");
+        fprintf(stderr, "Index out of bounds\n");
         exit(EXIT_FAILURE);
     }
     arr->buffer[index] = value;
@@ -35,7 +35,7 @@ void pushBack(DynamicArray * arr, int value) {
         arr->capacity *= 2;
         arr->buffer = (int *)realloc(arr->buffer, arr->capacity * sizeof(int));
         if (arr->buffer == NULL) {
-            printf(stderr, "Memory allocation failed\n");
+            fprintf(stderr, "Memory allocation failed\n");
             exit(EXIT_FAILURE);
         }
     }
@@ -45,7 +45,7 @@ void pushBack(DynamicArray * arr, int value) {
 
 int popBack(DynamicArray * arr) {
     if (arr->size == 0) {
-        printf(stderr, "Array is empty\n");
+        fprintf(stderr, "Array is empty\n");
         exit(EXIT_FAILURE);
     }
     int value = arr->buffer[arr->size - 1];
@@ -62,7 +62,7 @@ void release(DynamicArray * arr) {
 
 void pushToIndex(DynamicArray * arr, int index, int value) {
     if (index < 0 || index > arr->size) {
-        printf(stderr, "Index out of bounds\n");
+        fprintf(stderr, "Index out of bounds\n");
         exit(EXIT_FAILURE);
     }
 
@@ -70,7 +70,7 @@ void pushToIndex(DynamicArray * arr, int index, int value) {
         arr->capacity *= 2;
         arr->buffer = (int *)realloc(arr->buffer, arr->capacity * sizeof(int));
         if (arr->buffer == NULL) {
-            printf(stderr, "Memory allocation failed\n");
+            fprintf(stderr, "Memory allocation failed\n");
             exit(EXIT_FAILURE);
         }
     }
