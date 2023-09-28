@@ -7,6 +7,6 @@ main.exe: doublelinkedlist.o main.c
 	gcc main.c doublelinkedlist.o -o main.exe
 
 clean:
-	rm -f *.exe *.o
+	del *.exe *.o
 
 

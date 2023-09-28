@@ -7,6 +7,6 @@ main.exe: linkedlist.o main.c
 	gcc main.c linkedlist.o -o main.exe
 
 clean:
-	rm -f *.exe *.o
+	del *.exe *.o
 
 

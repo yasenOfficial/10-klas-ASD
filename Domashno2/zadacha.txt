@@ -1,0 +1,1 @@
+Implemet a vector dynamic array that doubles the allocated memory when an element is added and divides it by 2 when an element is removed.

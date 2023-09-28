@@ -7,6 +7,6 @@ main.exe: dynarr.o main.c
 	gcc main.c dynarr.o -o main.exe
 
 clean:
-	rm -f *.exe *.o
+	del *.exe *.o
 
 
