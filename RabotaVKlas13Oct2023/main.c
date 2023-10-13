@@ -1,25 +1,25 @@
 #include <stdio.h>
 
 void merge(int arr[], int left[], int right[], int leftSize, int rightSize) {
-    int i, j, k;
+    int i, j, arrCount;
     
-    for (i = 0, j = 0, k = 0; i < leftSize && j < rightSize;) {
+    for (i = 0, j = 0, arrCount = 0; i < leftSize && j < rightSize;) {
         if (left[i] < right[j]) {
-            arr[k] = left[i];
+            arr[arrCount] = left[i];
             i++;
         } else {
-            arr[k] = right[j];
+            arr[arrCount] = right[j];
             j++;
         }
-        k++;
+        arrCount++;
     }
 
-    for (; i < leftSize; i++, k++) {
-        arr[k] = left[i];
+    for (; i < leftSize; i++, arrCount++) {
+        arr[arrCount] = left[i];
     }
 
-    for (; j < rightSize; j++, k++) {
-        arr[k] = right[j];
+    for (; j < rightSize; j++, arrCount++) {
+        arr[arrCount] = right[j];
     }
 }
 
