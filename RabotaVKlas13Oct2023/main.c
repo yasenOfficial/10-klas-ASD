@@ -3,7 +3,7 @@
 void merge(int arr[], int left[], int right[], int leftSize, int rightSize) {
     int i, j, k;
     
-    for (i = 0, j = 0, k = 0; i < leftSize && j < rightSize; ) {
+    for (i = 0, j = 0, k = 0; i < leftSize && j < rightSize;) {
         if (left[i] < right[j]) {
             arr[k] = left[i];
             i++;
