@@ -25,8 +25,8 @@ void quickSort(int arr[], int left, int right)
 
         swap(&arr[i + 1], &arr[right]);
 
-        quickSort(arr, left, i);
-        quickSort(arr, i + 1, right);
+        quickSort(arr, left, i); // Sotiraj lqvata strana
+        quickSort(arr, i + 1, right); // Sotiraj dqsna strana
 
     }
 }
