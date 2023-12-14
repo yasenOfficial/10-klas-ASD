@@ -5,6 +5,8 @@
 #include "queue.h"
 #define MAX_SIZE 100
 
+// gcc queue.c -c
+// gcc queue.c main.c -o main && ./main
 
 struct node_t {
     int value;
