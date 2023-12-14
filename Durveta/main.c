@@ -128,25 +128,29 @@ int balance(struct node_t* root) {
     // balance(root->left); AT HOME
 }
 
+void visualizeTree(struct node_t *root, int level)
+{
+        if (root == NULL)
+                return;
+        for (int i = 0; i < level; i++)
+                printf(i == level - 1 ? "|->" : "   ");
+        printf("%d\n", root->value);
+        visualizeTree(root->left, level + 1);
+        visualizeTree(root->right, level + 1);
+}
+
+
 
 int main() {
-    struct node_t* root = add(NULL, 5);
-    add(root, 3);
-    add(root, 10);
-    add(root, 8);
-    add(root, 15);
+    struct node_t* root = add(NULL, 4);
+    add(root, 2);
     add(root, 6);
-    add(root, 9);
+    add(root, 1);
+    add(root, 3);
+    add(root, 5);
     add(root, 7);
 
-
-    // if (is_balanced(root)) {
-    //     printf("The tree is balanced.\n");
-    // } else {
-    //     printf("The tree is not balanced.\n");
-    // }
-
-    printf("The minimal height of the tree is %d.\n", minimal_height(root));
+    visualizeTree(root, 0);
 
     return 0;
 }
