@@ -179,7 +179,7 @@ int main() {
     add_choice(&(root->playerChoices), "Pitaj za Quest", init_node("Mnogo si smel! Iskash li da namerish sukrovishte?", NULL, NULL), NULL, 0);
 
     DialogueNode *questNode = root->playerChoices->nextStep;
-    add_choice(&(questNode->playerChoices), "Priemi Quest-a", init_node("Super! Otidi do centura na tezi koordinati 45.23, 56.21", NULL, NULL), "Map", 1);
+    add_choice(&(questNode->playerChoices), "Priemi Quest-a (1x Map)", init_node("Super! Otidi do centura na tezi koordinati 45.23, 56.21", NULL, NULL), "Map", 1);
     add_choice(&(questNode->playerChoices), "Otkazji Quest-a", init_node("Ne iskash sukrovishte? Tvoq volq.", NULL, NULL), NULL, 0);
     add_choice(&(questNode->playerChoices), "Vurni se nazad!", root, NULL, 0);
 
@@ -194,9 +194,9 @@ int main() {
     add_choice(&(root->playerChoices), "Igraj belot s mestnite", init_node("Ti si pod ruka", NULL, NULL), NULL, 0);
 
     DialogueNode *belotNode = root->playerChoices->nextStep;
-    add_choice(&(belotNode->playerChoices), "Pika", init_node("Pass, Bez Kos, VSICHKO KOS!", NULL, NULL), "Cards", 5);
-    add_choice(&(belotNode->playerChoices), "Pass", init_node("Pass, Pass, Kupa", NULL, NULL), NULL, 0);
-    add_choice(&(belotNode->playerChoices), "Bez Kos", init_node("kakuv bez kos, tova si e vsichko kos!, KONTRA!", NULL, NULL), NULL, 0);
+    add_choice(&(belotNode->playerChoices), "Pika (5x Cards)", init_node("Pass, Bez Kos, VSICHKO KOS!", NULL, NULL), "Cards", 5);
+    add_choice(&(belotNode->playerChoices), "Pass (5x Cards)", init_node("Pass, Pass, Kupa", NULL, NULL), "Cards", 5);
+    add_choice(&(belotNode->playerChoices), "Bez Kos (5x Cards)", init_node("kakuv bez kos, tova si e vsichko kos!, KONTRA!", NULL, NULL), "Cards", 5);
                                                         
     add_choice(&(belotNode->playerChoices), "Vurni se nazad!", root, NULL, 0);
 
