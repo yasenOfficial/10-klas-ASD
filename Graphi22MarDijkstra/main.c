@@ -56,6 +56,9 @@ void demo_graph() {
 
     print_graph(my_graph);
 
+    printf("Finding shortest path from test1 to test5 using Dijkstra's Algorithm:\n");
+    find_dijkstra_route(my_graph, "test1", "test5");
+
     destroy_graph_edge(my_edge);
     destroy_graph_node(my_node);
     destroy_graph(my_graph);

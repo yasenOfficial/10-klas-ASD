@@ -8,7 +8,7 @@ struct djikstra_info_t {
     graph_node_t* node;
     int visited;
     int weight;
-    graph_node_t* prev;
+    struct djikstra_info_t* prev_info;
 };
 
 int compare_nodes(void* left, void* right) {
@@ -41,7 +41,7 @@ void find_dijkstra_route(graph_t* graph, char* start, char* end) {
         d_node->node = graph_node;
         d_node->visited = 0;
         d_node->weight = (strcmp(start, graph_node->name) == 0) ? 0 : -1;
-        d_node->prev = NULL;
+        d_node->prev_info = NULL;
 
         push_queue(nodes, d_node);
         info = push_list(info, d_node);
@@ -66,11 +66,21 @@ void find_dijkstra_route(graph_t* graph, char* start, char* end) {
 
             if (neighbour_info->weight == -1 || new_distance < neighbour_info->weight) {
                 neighbour_info->weight = new_distance;
-                neighbour_info->prev = smallest->node;
+                neighbour_info->prev_info = smallest;
 
                 push_queue(nodes, neighbour_info);
             }
-            
         }
+    }
+
+    struct djikstra_info_t* end_info = find_info_for_node(info, find_node_by_name(graph, end));
+    if (end_info) {
+        printf("Shortest path from %s to %s is: ", start, end);
+        struct djikstra_info_t* current_info = end_info;
+        while (current_info != NULL) {
+            printf("%s ", current_info->node->name);
+            current_info = current_info->prev_info;
+        }
+        printf("\n");
     }
 }
