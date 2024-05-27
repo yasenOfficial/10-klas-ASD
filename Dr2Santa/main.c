@@ -233,6 +233,9 @@ void add_item_to_inventory(Inventory *inventory, char *itemName, int quantity) {
         }
     }
 }
+void(){
+    
+}
 
 int main() {
     Inventory playerInventory = {0};
