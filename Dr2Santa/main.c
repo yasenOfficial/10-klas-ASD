@@ -246,6 +246,25 @@ void decrease_item_quantity(Inventory *inventory, char *itemName, int quantity) 
     }
 }
 
+<<<<<<< HEAD
+=======
+void add_item_to_inventory(Inventory *inventory, char *itemName, int quantity) {
+    for (int i = 0; i < MAX_ITEMS; ++i) {
+        if (inventory->items[i].name == NULL) {
+            inventory->items[i].name = strdup(itemName);
+            inventory->items[i].quantity = quantity;
+            break;
+        } else if (strcmp(inventory->items[i].name, itemName) == 0) {
+            inventory->items[i].quantity += quantity;
+            break;
+        }
+    }
+}
+void(){
+    
+}
+
+>>>>>>> 618fbb630a82e59defe654e92b423d1262e5b808
 int main() {
     Inventory playerInventory = {0};
     DialogNode *root = create_node("Zdravej i dobre doshul v Kaspichan", NULL, NULL);

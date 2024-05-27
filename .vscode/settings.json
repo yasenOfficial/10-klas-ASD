@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "stdio.h": "c",
+<<<<<<< HEAD
         "stdlib.h": "c"
+=======
+        "stdint.h": "c"
+>>>>>>> 618fbb630a82e59defe654e92b423d1262e5b808
     }
 }
