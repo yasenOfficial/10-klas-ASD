@@ -23,19 +23,19 @@ typedef struct Inventory {
 typedef struct ChoiceNode {
     char *choice;
     struct ChoiceNode *next;
-    struct DialogueNode *nextStep;
-    char *requiredItem;  // New field for required item
-    int requiredQuantity;  // New field for required quantity
+    struct DialogNode *nextStep;
+    char *requiredItem;  
+    int requiredQuantity; 
 } ChoiceNode;
 
-typedef struct DialogueNode {
+typedef struct DialogNode {
     char *npcCue;
     struct ChoiceNode *playerChoices;
-    struct DialogueNode *nextSteps;
-} DialogueNode;
+    struct DialogNode *nextSteps;
+} DialogNode;
 
-DialogueNode *init_node(char *npcCue, ChoiceNode *playerChoices, DialogueNode *nextSteps) {
-    DialogueNode *node = (DialogueNode *)malloc(sizeof(DialogueNode));
+DialogNode *create_node(char *npcCue, ChoiceNode *playerChoices, DialogNode *nextSteps) {
+    DialogNode *node = (DialogNode *)malloc(sizeof(DialogNode));
 
     node->npcCue = npcCue;
     node->playerChoices = playerChoices;
@@ -44,7 +44,7 @@ DialogueNode *init_node(char *npcCue, ChoiceNode *playerChoices, DialogueNode *n
     return node;
 }
 
-ChoiceNode *init_choice(char *choice, DialogueNode *nextStep, char *requiredItem, int requiredQuantity) {
+ChoiceNode *init_choice(char *choice, DialogNode *nextStep, char *requiredItem, int requiredQuantity) {
     ChoiceNode *choiceNode = (ChoiceNode *)malloc(sizeof(ChoiceNode));
 
     choiceNode->choice = choice;
@@ -56,13 +56,38 @@ ChoiceNode *init_choice(char *choice, DialogueNode *nextStep, char *requiredItem
     return choiceNode;
 }
 
-void add_choice(ChoiceNode **head, char *choice, DialogueNode *nextStep, char *requiredItem, int requiredQuantity) {
+void add_item_to_inventory(Inventory *inventory, char *itemName, int quantity) {
+    for (int i = 0; i < MAX_ITEMS; ++i) {
+        if (inventory->items[i].name == NULL) {
+            inventory->items[i].name = strdup(itemName);
+            inventory->items[i].quantity = quantity;
+            break;
+        } else if (strcmp(inventory->items[i].name, itemName) == 0) {
+            inventory->items[i].quantity += quantity;
+            break;
+        }
+    }
+}
+
+void add_choice(ChoiceNode **head, char *choice, DialogNode *nextStep, char *requiredItem, int requiredQuantity, Inventory *inventory, char *itemName, int quantity, DialogNode *currentNode) {
     ChoiceNode *newChoice = init_choice(choice, nextStep, requiredItem, requiredQuantity);
     newChoice->next = *head;
     *head = newChoice;
+    // printf("DEBUG: Current Node: %p\n", currentNode); // DEBUG
+    // printf("DEBUG: Next Step: %p\n", nextStep); // DEBUG
+
+    if (currentNode != NULL && currentNode == nextStep) {
+        // printf("DEBUG: Item Name: %s\n", itemName); // DEBUG
+        // printf("DEBUG: Quantity: %d\n", quantity); // DEBUG
+        if (itemName != NULL && quantity > 0) {
+            add_item_to_inventory(inventory, itemName, quantity);
+            print_inventory(inventory, 5);
+        }
+    }
 }
 
-void free_node(DialogueNode *node) {
+
+void free_node(DialogNode *node) {
     free(node->npcCue);
 
     ChoiceNode *currentChoice = node->playerChoices;
@@ -103,7 +128,7 @@ void print_inventory(Inventory *inventory, int color) {
     printf("\n");
 }
 
-void play_dialogue(DialogueNode *node, Inventory *playerInventory, DialogueNode *root) {
+void play_dialogue(DialogNode *node, Inventory *playerInventory, DialogNode *root) {
     int flag = 0;
     int hasPrinted = 0;
     int skip = 0;
@@ -221,50 +246,37 @@ void decrease_item_quantity(Inventory *inventory, char *itemName, int quantity) 
     }
 }
 
-void add_item_to_inventory(Inventory *inventory, char *itemName, int quantity) {
-    for (int i = 0; i < MAX_ITEMS; ++i) {
-        if (inventory->items[i].name == NULL) {
-            inventory->items[i].name = strdup(itemName);
-            inventory->items[i].quantity = quantity;
-            break;
-        } else if (strcmp(inventory->items[i].name, itemName) == 0) {
-            inventory->items[i].quantity += quantity;
-            break;
-        }
-    }
-}
-
 int main() {
     Inventory playerInventory = {0};
-    DialogueNode *root = init_node("Zdravej i dobre doshul v Kaspichan", NULL, NULL);
+    DialogNode *root = create_node("Zdravej i dobre doshul v Kaspichan", NULL, NULL);
 
-    // 1. option
-    add_choice(&(root->playerChoices), "Pitaj za Quest", init_node("Mnogo si smel! Iskash li da namerish sukrovishte?", NULL, NULL), NULL, 0);
+    add_choice(&(root->playerChoices), "Pitaj za Quest", create_node("Mnogo si smel! Iskash li da namerish sukrovishte?", NULL, NULL), NULL, 0, &playerInventory, NULL, 0, NULL);
 
-    DialogueNode *questNode = root->playerChoices->nextStep;
-    add_choice(&(questNode->playerChoices), "Priemi Quest-a (-1x Map)", init_node("Super! Otidi do centura na tezi koordinati 45.23, 56.21", root, NULL), "Map", 1);
-    add_choice(&(questNode->playerChoices), "Otkazji Quest-a", init_node("Ne iskash sukrovishte? Tvoq volq.", root, NULL), NULL, 0);
-    add_choice(&(questNode->playerChoices), "Vurni se nazad!", root, NULL, 0);
+    DialogNode *questNode = root->playerChoices->nextStep;
+    add_choice(&(questNode->playerChoices), "Priemi Quest-a (-1x Map) (+10x cards)", create_node("Super! Otidi do centura na tezi koordinati 45.23, 56.21", root, NULL), "Map", 1, &playerInventory, NULL, 0, NULL);
+    add_choice(&(questNode->playerChoices), "Otkazji Quest-a", create_node("Ne iskash sukrovishte? Tvoq volq.", root, NULL), NULL, 0, &playerInventory, NULL, 0, NULL);
+    add_choice(&(questNode->playerChoices), "Vurni se nazad!", root, NULL, 0, &playerInventory, NULL, 0, NULL);
 
-    // 2. option
-    add_choice(&(root->playerChoices), "Razpitaj za seloto", init_node("Tova e naj-gotinoto selo - Kaspichan. Kakwo iskash da znaesh?", NULL, NULL), NULL, 0);
+    add_choice(&(root->playerChoices), "Razpitaj za seloto", create_node("Tova e naj-gotinoto selo - Kaspichan. Kakwo iskash da znaesh?", NULL, NULL), NULL, 0, &playerInventory, NULL, 0, NULL);
 
-    DialogueNode *townNode = root->playerChoices->nextStep;
-    add_choice(&(townNode->playerChoices), "Pitaj za istoriq na seloto", init_node("Tova selo e osnovano ot 3ma bratq - Stamat, Gulubin i Goran.", root, NULL), NULL, 0);
-    add_choice(&(townNode->playerChoices), "Pitaj kolko zhitelq ima seloto", init_node("Kaspichan ima 3,260 (Dec 2009)", root, NULL), NULL, 0);
-    add_choice(&(townNode->playerChoices), "Vurni se nazad!", root, NULL, 0);
+    DialogNode *townNode = root->playerChoices->nextStep;
+    add_choice(&(townNode->playerChoices), "Pitaj za istoriq na seloto", create_node("Tova selo e osnovano ot 3ma bratq - Stamat, Gulubin i Goran.", root, NULL), NULL, 0, &playerInventory, NULL, 0, NULL);
+    add_choice(&(townNode->playerChoices), "Pitaj kolko zhitelq ima seloto", create_node("Kaspichan ima 3,260 (Dec 2009)", root, NULL), NULL, 0, &playerInventory, NULL, 0, NULL);
+    add_choice(&(townNode->playerChoices), "Vurni se nazad!", root, NULL, 0, &playerInventory, NULL, 0, NULL);
 
-    add_choice(&(root->playerChoices), "Igraj belot s mestnite", init_node("Ti si pod ruka", NULL, NULL), NULL, 0);
+    add_choice(&(root->playerChoices), "Igraj belot s mestnite", create_node("Ti si pod ruka", NULL, NULL), NULL, 0, &playerInventory, NULL, 0, NULL);
 
-    DialogueNode *belotNode = root->playerChoices->nextStep;
-    add_choice(&(belotNode->playerChoices), "Pika (-5x Cards)", init_node("Pass, Bez Kos, VSICHKO KOS!", root, NULL), "Cards", 5);
-    add_choice(&(belotNode->playerChoices), "Pass (-5x Cards)", init_node("Pass, Pass, Kupa", root, NULL), "Cards", 5);
-    add_choice(&(belotNode->playerChoices), "Bez Kos (-5x Cards)", init_node("kakuv bez kos, tova si e vsichko kos!, KONTRA!", root, NULL), "Cards", 5);
+    DialogNode *belotNode = root->playerChoices->nextStep;
+    add_choice(&(belotNode->playerChoices), "Pika (-5x Cards)", create_node("Pass, Bez Kos, VSICHKO KOS!", root, NULL), "Cards", 5, &playerInventory, NULL, 0, NULL);
+    add_choice(&(belotNode->playerChoices), "Pass (-5x Cards)", create_node("Pass, Pass, Kupa", root, NULL), "Cards", 5, &playerInventory, NULL, 0, NULL);
+    add_choice(&(belotNode->playerChoices), "Bez Kos (-5x Cards)", create_node("kakuv bez kos, tova si e vsichko kos!, KONTRA!", root, NULL), "Cards", 5, &playerInventory, NULL, 0, NULL);
                                                         
-    add_choice(&(belotNode->playerChoices), "Vurni se nazad!", root, NULL, 0);
+    add_choice(&(belotNode->playerChoices), "Vurni se nazad!", root, NULL, 0, &playerInventory, NULL, 0, NULL);
 
     add_item_to_inventory(&playerInventory, "Book", 1);
     add_item_to_inventory(&playerInventory, "Cards", 5);
+    add_item_to_inventory(&playerInventory, "Map", 1);
+
 
 
     print_inventory(&playerInventory, 3);
